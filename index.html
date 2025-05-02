@@ -55,25 +55,6 @@
         text-shadow: 0 0 10px #fff, 0 0 20px #0ff;
       }
     }
-
-    button {
-      margin-top: 30px;
-      padding: 10px 20px;
-      font-size: 24px;
-      font-weight: bold;
-      border: none;
-      border-radius: 10px;
-      background: #111;
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
-      transition: all 0.3s ease;
-    }
-
-    button:hover {
-      background: #222;
-      box-shadow: 0 0 20px #0ff, 0 0 40px #0ff;
-    }
   </style>
 </head>
 <body>
@@ -81,7 +62,6 @@
     <div class="reel">
       <div class="reel-inner" id="reelInner"></div>
     </div>
-    <button onclick="spinReel()">SPIN</button>
   </div>
 
   <script>
@@ -147,20 +127,15 @@
         setTimeout(() => {
           if (socket && socket.readyState === WebSocket.OPEN) {
             socket.send(`Result:${finalItem}`);
-            console.log("Sent result back to server:", finalItem);
           }
         }, 2000);
       });
     }
 
-    socket = new WebSocket('ws://localhost:19190');
-
-    socket.addEventListener('open', () => {
-      console.log("Connected to WebSocket server.");
-    });
+    // Connect to WebSocket server
+    socket = new WebSocket('ws://localhost:8000');
 
     socket.addEventListener('message', (event) => {
-      console.log("Message received:", event.data);
       if (event.data === "Spin") {
         spinReel();
       }
