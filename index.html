@@ -14,6 +14,7 @@
     #container {
       height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
     }
@@ -54,6 +55,25 @@
         text-shadow: 0 0 10px #fff, 0 0 20px #0ff;
       }
     }
+
+    button {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 24px;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      background: #111;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: #222;
+      box-shadow: 0 0 20px #0ff, 0 0 40px #0ff;
+    }
   </style>
 </head>
 <body>
@@ -61,6 +81,7 @@
     <div class="reel">
       <div class="reel-inner" id="reelInner"></div>
     </div>
+    <button onclick="spinReel()">SPIN</button>
   </div>
 
   <script>
@@ -74,6 +95,7 @@
     ];
 
     const glowColors = ["#0ff", "#f0f", "#0f0", "#ff0", "#f00", "#00f"];
+    let socket = null;
 
     function getWeightedRandomItem(items) {
       const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
@@ -121,10 +143,17 @@
         const targetY = -reelHeight * (spinList.length - 1);
         reelInner.style.transition = "transform 2s ease-out";
         reelInner.style.transform = `translateY(${targetY}px)`;
+
+        setTimeout(() => {
+          if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.send(`Result:${finalItem}`);
+            console.log("Sent result back to server:", finalItem);
+          }
+        }, 2000);
       });
     }
 
-    const socket = new WebSocket('ws://localhost:8080');
+    socket = new WebSocket('ws://localhost:8080');
 
     socket.addEventListener('open', () => {
       console.log("Connected to WebSocket server.");
