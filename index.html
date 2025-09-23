@@ -27,30 +27,15 @@
   </head>
 <body>
   <div class="grid">
+    <img src="./image1.jpg" alt="image1">
+    <img src="./image2.jpg" alt="image2">
+    <img src="./image3.jpg" alt="image3">
+    <img src="./image4.jpg" alt="image4">
+    <img src="./image5.jpg" alt="image5">
+    <img src="./image6.jpg" alt="image6">
+    <img src="./image7.jpg" alt="image7">
+    <img src="./image8.jpg" alt="image8">
   </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      const grid = document.querySelector('.grid');
-      const maxImages = 8;
-      const imageExts = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.bmp', '.svg'];
-      try {
-        const res = await fetch('.', { method: 'GET' });
-        const text = await res.text();
-        const doc = new DOMParser().parseFromString(text, 'text/html');
-        const hrefs = Array.from(doc.querySelectorAll('a[href]')).map(a => a.getAttribute('href') || '');
-        const files = hrefs.filter(h => imageExts.some(ext => h.toLowerCase().endsWith(ext)));
-        const unique = Array.from(new Set(files)).slice(0, maxImages);
-        unique.forEach(src => {
-          const img = document.createElement('img');
-          img.src = src;
-          img.alt = src;
-          grid.appendChild(img);
-        });
-      } catch (err) {
-        // 디렉터리 인덱싱이 비활성화된 경우 자동 감지가 불가할 수 있습니다.
-      }
-    });
-  </script>
 </body>
 </html>
 
